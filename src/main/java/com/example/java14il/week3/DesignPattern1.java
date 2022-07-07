@@ -2,9 +2,8 @@ package com.example.java14il.week3;
 
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -355,3 +354,161 @@ class BTTranversal {
  *  deadline: tomorrow morning 10:00 am cdt
  *  upload to github
  */
+
+
+class VolatileExample {
+    private static volatile boolean flag = true;
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(() -> {
+            while(flag) {}
+            System.out.println("this is t1 after while loop");
+        });
+        Thread t2 = new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            flag = false;
+            System.out.println("t2 change flag to: " + flag);
+        });
+//        t1.start();
+//        t2.start();
+//        t1.join();
+//        t2.join();
+
+//        int v1 = 130;
+//        int v2 = 130;
+        Integer v3 = 128;
+        Integer v4 = 128;
+//        System.out.println(v1 == v2);
+//        System.out.println(v1 == v3);
+        System.out.println(v3.equals(v4));
+    }
+}
+
+/**
+ *
+ *  Stream api
+ *      stateful operation  (sorted, distinct)
+ *      stateless operation (map, filter..)
+ *
+ *  S
+ */
+class HW1 {
+    public static List<HW1Employee> removeDup(List<HW1Employee> emps) {
+//        if(emps == null) {
+//            throw new IllegalArgumentException()
+//        }
+//        Optional.ofNullable(emps).orElse(new ArrayList<>())
+//                .stream()
+//                .distinct()
+//                .collect(Collectors.toList());
+//        new ArrayList<>(new HashSet<>(emps));
+        Iterator<HW1Employee> itr = emps.iterator();
+        while(itr.hasNext()) {
+            HW1Employee emp = itr.next();
+            //..
+        }
+        for(HW1Employee emp: emps) {
+            emps.add(null);
+        }
+        return null;
+    }
+}
+
+
+class HW1Employee {
+    private int id;
+    private String name;
+    private int age;
+
+    public HW1Employee() {
+    }
+
+    public HW1Employee(int id, String name, int age) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HW1Employee that = (HW1Employee) o;
+        return id == that.id && age == that.age && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, age);
+    }
+}
+
+class HW1CompletableFuture {
+    private static ExecutorService pool = Executors.newCachedThreadPool();
+    public static int sum1(List<List<Integer>> input) throws ExecutionException, InterruptedException {
+        List<Future<Integer>> futures = new ArrayList<>();
+        for(List<Integer> l: input) {
+            Future<Integer> f = pool.submit(() -> l.stream().reduce(0, (x, y) -> x + y));
+            futures.add(f);
+        }
+        int result = 0;
+        for(Future<Integer> f: futures) {
+            result += f.get();
+        }
+        return result;
+    }
+
+    public static int sum2(List<List<Integer>> input) throws ExecutionException, InterruptedException {
+        List<CompletableFuture<Integer>> futures = new ArrayList<>();
+        for(List<Integer> l: input) {
+            CompletableFuture<Integer> cf = CompletableFuture.supplyAsync(
+                    () -> l.stream().reduce(0, (x, y) -> x + y),
+                    pool
+            );
+            futures.add(cf);
+        }
+        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+                .thenApply(Void -> {
+                    int result = 0;
+                    for(CompletableFuture<Integer> f: futures) {
+                        result += f.join();
+                    }
+                    return result;
+                }).join();
+    }
+}
+
+
+
+
+
+
+
