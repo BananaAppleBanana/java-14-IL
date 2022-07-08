@@ -401,10 +401,10 @@ class HW1 {
 //        if(emps == null) {
 //            throw new IllegalArgumentException()
 //        }
-//        Optional.ofNullable(emps).orElse(new ArrayList<>())
-//                .stream()
-//                .distinct()
-//                .collect(Collectors.toList());
+        Optional.ofNullable(emps).orElse(new ArrayList<>())
+                .stream()
+                .distinct()
+                .collect(Collectors.toList());
 //        new ArrayList<>(new HashSet<>(emps));
         Iterator<HW1Employee> itr = emps.iterator();
         while(itr.hasNext()) {
