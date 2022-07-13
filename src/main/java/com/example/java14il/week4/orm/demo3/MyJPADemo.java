@@ -12,7 +12,71 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ *  how to use hibernate
+ *      1. create datasource (username, password, url, database name)
+ *      2. provide dialect
+ *      3. setPackagesToScan(path)
+ *      4. create session factory / entity manager factory
+ *      5. get session / entity manager
+ *      6. write entity
+ *          student m - m teacher
+ *          student (stu_id(pk), name)
+ *          student_teacher (id(pk), stu_id(fk), teacher_id(fk))
+ *          teacher (teacher_id(pk), name)
+ *
+ *
+ *          bi-direction
+ *          class Student {
+ *              private String id;
+ *              private String name;
+ *              @OneToMany(mappedBy = "stu", fetch = FetchType.LAZY)
+ *              private List<Student_Teacher> stList;
+ *          }
+ *
+ *
+ *          class Student_Teacher {
+ *              @ManyToOne(fetch = FetchType.LAZY)
+ *              @JoinColumn(..)
+ *              private Student stu;
+ *          }
+ *
+ *          hql select s from Student s
+ *              1. select * from student
+ *              2. select * from student s1 join Student_Teacher st1 on s1.stu_id = st1.stu_id
+ *          why lazy or eager ?
+ *
+ *          example:
+ *          Student => lazy loading
+ *          Student s = entityManager.find(Student.class, "1");
+ *          List<Student_Teacher> stList = s.getStList();  //select...join ...where stu_id = '1'
+ *          question1: how many queries have we sent to db ?  2 queries
+ *          question2: can we send one query to db and retrieve everything we need ?  createQuery(".. join fetch..")
+ *          question3: if we get List of student(size is N), and use lazy loading to retrieve teacher_student, how many queries ?  1 + N issues / problems
+ *          question4: how does lazy loading work ?
+ *                      s.getStList(); => proxy.getStList() => proxy invoke() => customized logic
+ *
+ *  Hibernate vs JPA
+ *      SessionFactory => session => saveOrUpdate
+ *      EntityManagerFactory => EntityManager => persist(obj)(create) , merge() : create / update
+ *
+ *  obj status of hibernate
+ *      1. transient => new Student()
+ *      2. proxied / attached
+ *      3. un-proxied / detached (lazy initialization exception when you do lazy loading)
+ *
+ *  Spring data jpa
+ *
+ *  tomorrow :
+ *      homework dead line: Wed 10am cdt
+ *      Spring IOC + AOP + Spring Boot
+ *
+ *  Tomorrow's homework is s
+ *      1. combine hibernate with spring boot
+ *      2. provide Spring AOP (aspect) => before + after + around => system print out
+ */
 public class MyJPADemo {
+
 
     private DataSource getDataSource() {
         final PGSimpleDataSource dataSource = new PGSimpleDataSource();
