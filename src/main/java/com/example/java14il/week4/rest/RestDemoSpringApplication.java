@@ -72,4 +72,9 @@ public class RestDemoSpringApplication {
  *          ...
  *
  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *  1. make it thread safe
+ *  2. provide update + create + delete rest endpoint
+ *
+ *
  */
