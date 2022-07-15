@@ -76,5 +76,12 @@ public class RestDemoSpringApplication {
  *  1. make it thread safe
  *  2. provide update + create + delete rest endpoint
  *
- *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *  homework
+ *      1. add rest apis to your hibernate / orm homework
+ *      2. add exception handling
+ *      3. add logger(debug + error messages)
+ *      4. add Aspect + AOP => log service before + after (print in console)
+ *      5. use @ControllerAdvice to handle global exception
+ *      6. add Rest Controller Advice to centralize response after controller returns data
  */
