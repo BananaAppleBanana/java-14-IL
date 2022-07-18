@@ -18,6 +18,7 @@ import java.util.List;
 public class StudentController {
     private final StudentService studentService;
 
+
     @Autowired
     public StudentController(StudentService studentService) {
         this.studentService = studentService;
@@ -33,6 +34,24 @@ public class StudentController {
         return new ResponseEntity<>(studentService.getStudentById(id), HttpStatus.OK);
     }
 
+    @PostMapping("/students") //not idempotent
+    public ResponseEntity<CommonResponse> createStudent(@RequestBody Student student) {
+         //id
+        return null;
+    }
+
+    //update student id : 500 , set name from tom to jerry
+    @PutMapping("/students/{id}") // idempotent
+    public ResponseEntity<CommonResponse> updateStudent(@PathVariable String id, @RequestBody Student student) {
+        //id
+        return null;
+    }
+
+    @DeleteMapping("/students/{id}") // idempotent
+    public ResponseEntity<CommonResponse> delete(@PathVariable String id) {
+        //id
+        return null;
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> resourceNotFoundHandler() {

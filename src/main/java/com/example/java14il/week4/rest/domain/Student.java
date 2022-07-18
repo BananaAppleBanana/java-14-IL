@@ -1,5 +1,7 @@
 package com.example.java14il.week4.rest.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Student {
     private String id;
     private String name;
