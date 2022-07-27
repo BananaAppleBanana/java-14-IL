@@ -10,4 +10,11 @@ public class CommonResponse {
     public void setData(Object data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "CommonResponse{" +
+                "data=" + data +
+                '}';
+    }
 }

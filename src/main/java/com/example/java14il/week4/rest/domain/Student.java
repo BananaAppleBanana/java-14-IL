@@ -39,4 +39,13 @@ public class Student {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", active=" + active +
+                '}';
+    }
 }
